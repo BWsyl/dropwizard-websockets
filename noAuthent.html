@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <script>
+        var ws = undefined;
+        /* Ecoute des évenements sur la connection permanente au serveur */
+        listenEvents = function(){
+            if(ws==undefined || ws.readyState==WebSocket.CLOSED) {
+                ws = new WebSocket("ws://localhost:5000/sockets");
+
+                /* A l'ouverture de la connection, on envoie le token pour l'authentification */
+                ws.onopen = function () {
+
+
+                };
+
+                ws.onmessage = function (evt) {
+                    console.log(evt.data);
+
+                };
+
+                /* en cas d'erreur ou de fermeture de connection, on retente la connection */
+                ws.onclose = function (evt) {
+                    console.log("Connection closed : ");
+                    console.log(evt);
+                    ws=undefined;
+
+                };
+                ws.onerror = function (evt) {
+                    console.log("WebSocket error : ")
+                    console.log(evt);
+                    ws = undefined;
+
+                };
+            }
+        };
+    </script>
+
+</head>
+<body onload="listenEvents()">
+
+</html>
